@@ -2,7 +2,7 @@
     @if ($showButton)
         <x-slot name="buttonHeader">
             <x-button id="reductionStock" type="button" @click="openModal($event,'modalReductionStock', '#modalReductionStock')"
-                class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                 Tambah Pengeluaran
             </x-button>
         </x-slot>
@@ -27,7 +27,7 @@
                         <button type="button" @click="openModal($event,'modalEditReduction', '#modalEditReduction')" data-id="{{ $item->id }}"
                                 data-stockid="{{ $item->item_stock_id }}" data-description="{{ $item->description }}"
                                 data-expense="{{ $item->expense }}"
-                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
+                            class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit">
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
                                 <path

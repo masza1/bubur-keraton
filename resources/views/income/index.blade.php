@@ -6,7 +6,7 @@
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div class="flex">
             <div class="flex-auto">
-                <x-input @input.debounce.500ms="changeDate($event)" type="date" id="date" name="date" class="block w-full" site="incomes"
+                <x-input @change.debounce.500ms="changeDate($event)" type="date" id="date" name="date" class="block w-full" site="incomes"
                     value="{{ $date ?? date('Y-m-d') }}" />
             </div>
             <div class="flex-none ml-2 mt-1">
@@ -23,10 +23,10 @@
 
     <x-slot name="modals">
         <x-base-modal id="modalAddItem" :modalWidth="__('w-8/12')" :withForm="true" :formId="__('formAddItem')">
-            <x-slot name="modalTitle">Tambah Barang</x-slot>
+            <x-slot name="modalTitle">Tambah Menu</x-slot>
             <div class="grid grid-cols-3 sm:grid-cols-10 gap-3">
                 <div class="col-span-3 sm:col-span-6">
-                    <x-label>Nama Barang</x-label>
+                    <x-label>Nama Menu</x-label>
                     <x-input type="text" id="name[]" name="name[]" class="block w-full" autofocus />
                 </div>
                 <div class="col-span-2 sm:col-span-3">
@@ -57,7 +57,7 @@
                 <div class="col-span-9 sm:col-span-3 mt-1">
                     <x-label>Platform</x-label>
                     <x-input :inputType="__('select')" id="platform[]" name="platform[]" class="block w-full" autofocus>
-                        <option value="" selected disabled>Pilih Barang</option>
+                        <option value="" selected disabled>Pilih Platform</option>
                         <option value="1">Offline</option>
                         <option value="2">Gojek</option>
                         <option value="3">Grab</option>
@@ -65,9 +65,9 @@
                     </x-input>
                 </div>
                 <div class="col-span-9 sm:col-span-3 mt-1">
-                    <x-label>Barang</x-label>
+                    <x-label>Menu</x-label>
                     <x-input :inputType="__('select')" id="item_id[]" name="item_id[]" class="block w-full item_id" autofocus>
-                        <option value="" selected disabled>Pilih Barang</option>
+                        <option value="" selected disabled>Pilih Menu</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach
@@ -103,7 +103,7 @@
                 <div class="col-span-9 sm:col-span-3 mt-1">
                     <x-label>Platform</x-label>
                     <x-input :inputType="__('select')" id="platform" name="platform" class="block w-full" autofocus>
-                        <option value="" selected disabled>Pilih Barang</option>
+                        <option value="" selected disabled>Pilih Platform</option>
                         <option value="1">Offline</option>
                         <option value="2">Gojek</option>
                         <option value="3">Grab</option>
@@ -111,9 +111,9 @@
                     </x-input>
                 </div>
                 <div class="col-span-6 sm:col-span-5 mt-1">
-                    <x-label>Barang</x-label>
+                    <x-label>Menu</x-label>
                     <x-input :inputType="__('select')" id="item_id" name="item_id" class="block w-full item_id" autofocus>
-                        <option value="" selected disabled>Pilih Barang</option>
+                        <option value="" selected disabled>Pilih Menu</option>
                         @foreach ($items as $item)
                             <option value="{{ $item->id }}">{{ $item->name }}</option>
                         @endforeach

@@ -3,11 +3,11 @@
         <x-slot name="buttonHeader">
             <div class="flex justify-end gap-2">
                 <x-button id="addItem" type="button" @click="openModal($event,'modalAddItem', '#modalAddItem')"
-                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
-                    Tambah Barang
+                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                    Tambah Menu
                 </x-button>
                 <x-button id="addIncome" type="button" @click="openModal($event,'modalAddIncome', '#modalAddIncome')"
-                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                     Tambah Pemasukan
                 </x-button>
             </div>
@@ -19,7 +19,7 @@
     </x-slot>
 
     <x-slot name="thead">
-        <th class="px-4 py-3 w-5/12">Nama Barang</th>
+        <th class="px-4 py-3 w-5/12">Menu</th>
         <th class="px-4 py-3 w-2/12">Platform</th>
         <th class="px-4 py-3 w-1/12">Jumlah</th>
         <th class="px-4 py-3 w-3/12">Tanggal/Jam</th>

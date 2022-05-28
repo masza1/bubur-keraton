@@ -302,11 +302,6 @@ class StockController extends Controller
                 return 'Masakan';
             }
         });
-        // return $item_stocks;
-        // return view('stock.report-stock', [
-        //     'date' => $date,
-        //     'item_stocks' => $item_stocks,
-        // ]);
         return (new StockReportExcel($item_stocks, $date))->download('laporan_stock_' . date('d_M_Y', strtotime($date)) . '.xlsx');
     }
 
@@ -315,56 +310,48 @@ class StockController extends Controller
         if (request()->ajax()) {
             $date = request()->date;
             if ($date != null) {
-                $subdate = Carbon::parse($date, 'Asia/Jakarta')->subDays(1);
-                $item_stocks = ItemStock::with(['stocks' => function ($q) use ($subdate) {
-                    $q->select('id', 'item_stock_id', 'date', DB::raw('sum(stock) as total'))
-                        ->whereDate('date', $subdate)
-                        ->groupby('item_stock_id');
-                }, 'stock_reductions' => function ($q) use ($subdate) {
-                    $q->select('id', 'item_stock_id', 'date', DB::raw('sum(expense) as total'))
-                        ->whereDate('date', $subdate)
-                        ->groupby('item_stock_id');
-                }])->get();
-                $data = [];
-                foreach ($item_stocks as $key => $item) {
-                    $stock = 0;
-                    $reduction = 0;
-                    if (count($item->stocks) > 0) {
-                        $stock = $item->stocks[0]['total'];
-                    }
-                    if (count($item->stock_reductions) > 0) {
-                        $reduction = $item->stock_reductions[0]['total'];
-                    }
-                    if($stock != 0 && $reduction != 0){
-                        array_push($data, [
-                            'item_stock_id' => $item->id,
-                            'stock' => $stock - $reduction,
-                            'date' => $date,
-                            'created_at' => Carbon::parse($date,'Asia/Jakarta')->format('Y-m-d H:i:s'),
-                            'updated_at' => Carbon::parse($date,'Asia/Jakarta')->format('Y-m-d H:i:s'),
-                        ]);
-                    }
-                }
-                if (Stock::insert($data)) {
-                    $showButton = false;
-                    if ($date == null) {
-                        $showButton = true;
-                    } else {
-                        if ($date == Carbon::now('Asia/Jakarta')->format('Y-m-d')) {
-                            $showButton = true;
-                        } else {
-                            $showButton = false;
+                if(Stock::whereDate('date', Carbon::now('Asia/Jakarta')->format('Y-m-d'))->first()) {
+                    return abort(422, 'Tidak bisa tarik data karena terdapat data tanggal saat ini.');
+                }else{
+                    $date = Carbon::parse($date, 'Asia/Jakarta')/* ->subDays(1) */;
+                    $item_stocks = ItemStock::with(['stocks' => function ($q) use ($date) {
+                        $q->select('id', 'item_stock_id', 'date', DB::raw('sum(stock) as total'))
+                            ->whereDate('date', $date)
+                            ->groupby('item_stock_id');
+                    }, 'stock_reductions' => function ($q) use ($date) {
+                        $q->select('id', 'item_stock_id', 'date', DB::raw('sum(expense) as total'))
+                            ->whereDate('date', $date)
+                            ->groupby('item_stock_id');
+                    }])->get();
+                    $data = [];
+                    foreach ($item_stocks as $key => $item) {
+                        $stock = 0;
+                        $reduction = 0;
+                        if (count($item->stocks) > 0) {
+                            $stock = $item->stocks[0]['total'];
+                        }
+                        if (count($item->stock_reductions) > 0) {
+                            $reduction = $item->stock_reductions[0]['total'];
+                        }
+                        if($stock != 0 && ($reduction != 0 || $reduction == 0)){
+                            array_push($data, [
+                                'item_stock_id' => $item->id,
+                                'stock' => $stock - $reduction,
+                                'date' => Carbon::now('Asia/Jakarta')->format('Y-m-d'),
+                                'created_at' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
+                                'updated_at' => Carbon::now('Asia/Jakarta')->format('Y-m-d H:i:s'),
+                            ]);
                         }
                     }
-                    $stocks = Stock::whereDate('date',  Carbon::now('Asia/Jakarta')->format('Y-m-d'),)->get();
-                    $table_stock = view('components.stock.table-stock', compact('stocks', 'showButton'))->render();
-                    return [
-                        'status' => 200,
-                        'message' => 'Berhasil menyimpan data',
-                        'table_stock' => $table_stock,
-                    ];
+                    if (Stock::insert($data)) {
+                        return [
+                            'status' => 200,
+                            'message' => 'Berhasil menyimpan data',
+                            'date' => Carbon::now('Asia/Jakarta')->format('Y-m-d'),
+                        ];
+                    }
+                    return abort(500, 'Query failed');
                 }
-                return abort(500, 'Query failed');
             }
             return abort(500, 'Error');
         }

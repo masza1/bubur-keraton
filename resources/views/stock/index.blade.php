@@ -6,7 +6,7 @@
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div class="flex">
             <div class="flex-auto">
-                <x-input @input.debounce.500ms="changeDate($event)" type="date" id="date" name="date" class="block w-full" site="stocks"
+                <x-input @change.debounce.500ms="changeDate($event)" type="date" id="date" name="date" class="block w-full" site="stocks"
                     value="{{ $date ?? date('Y-m-d') }}" />
             </div>
             <div class="flex-none ml-2 mt-1">
@@ -67,7 +67,7 @@
             <x-slot name="modalTitle">Tambah Stock Barang</x-slot>
             <div class="grid grid-cols-3 sm:grid-cols-10 gap-3">
                 <div class="col-span-3 sm:col-span-6 mt-1">
-                    <x-label>Tipe</x-label>
+                    <x-label>Nama Barang</x-label>
                     <x-input :inputType="__('select')" id="item_stock_id[]" name="item_stock_id[]" class="block w-full item_stock_id" autofocus>
                         <option value="" selected disabled>Pilih Barang</option>
                         @foreach ($item_stocks as $item)
@@ -101,7 +101,7 @@
             <x-slot name="modalTitle">Tambah Pengeluaran Barang</x-slot>
             <div class="grid grid-cols-9 gap-3">
                 <div class="col-span-9 sm:col-span-3 mt-1">
-                    <x-label>Tipe</x-label>
+                    <x-label>Nama Barang</x-label>
                     <x-input :inputType="__('select')" id="item_stock_id[]" name="item_stock_id[]" class="block w-full item_stock_id" autofocus>
                         <option value="" selected disabled>Pilih Barang</option>
                         @foreach ($item_stocks as $item)
@@ -141,7 +141,7 @@
             <x-slot name="textSubmit">Ubah</x-slot>
             <div class="grid grid-cols-2 gap-3">
                 <div class="col-span-2 sm:col-span-1">
-                    <x-label>Tipe</x-label>
+                    <x-label>Nama Barang</x-label>
                     <x-input :inputType="__('select')" id="item_stock_id" name="item_stock_id" class="block w-full item_stock_id" autofocus>
                         <option value="" selected disabled>Pilih Barang</option>
                         @foreach ($item_stocks as $item)
@@ -161,7 +161,7 @@
             <x-slot name="textSubmit">Ubah</x-slot>
             <div class="grid grid-cols-9 gap-3">
                 <div class="col-span-9 sm:col-span-3 mt-1">
-                    <x-label>Tipe</x-label>
+                    <x-label>Nama Barang</x-label>
                     <x-input :inputType="__('select')" id="item_stock_id" name="item_stock_id" class="block w-full item_stock_id" autofocus>
                         <option value="" selected disabled>Pilih Barang</option>
                         @foreach ($item_stocks as $item)

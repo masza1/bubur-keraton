@@ -1,6 +1,9 @@
 <aside class="z-20 hidden w-64 overflow-y-auto bg-white md:block flex-shrink-0">
     <div class="py-4 text-gray-500">
         <a class="ml-6 text-lg font-bold text-gray-800" href="{{ route('dashboard') }}">
+            <img aria-hidden="true" class="object-cover"
+                 src="{{ asset('images/logo-bubur-keraton.png') }}"
+                 alt="Office" style="width:50px; height:50px; display:inline"/>
             Bubur Keraton
         </a>
 
