@@ -1,14 +1,14 @@
 .bg-purple-600 {
   --tw-bg-opacity: 1;
-  background-color: rgb(236 52 52 / var(--tw-bg-opacity));
+  background-color: rgb(253 218 74 / var(--tw-bg-opacity));
 }
 
 .text-purple-600 {
   --tw-text-opacity: 1;
-  color: rgb(236 52 52 / var(--tw-text-opacity));
+  color: rgb(253 218 74 / var(--tw-text-opacity));
 }
 
 .focus\:border-purple-400:focus {
   --tw-border-opacity: 1;
-  border-color: rgb(236 75 76 / var(--tw-border-opacity));
+  border-color: rgb(253 218 74 / var(--tw-border-opacity));
 }

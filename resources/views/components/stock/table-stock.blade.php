@@ -3,11 +3,11 @@
         <x-slot name="buttonHeader">
             <div class="flex justify-end gap-2">
                 <x-button id="addItemStock" type="button" @click="openModal($event,'modalAddItemStock', '#modalAddItemStock')"
-                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                     Tambah Barang
                 </x-button>
                 <x-button id="addStock" type="button" @click="openModal($event,'modalAddStock', '#modalAddStock')"
-                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                    class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                     Tambah Stock
                 </x-button>
             </div>

@@ -1,6 +1,6 @@
 <x-guest-layout>
     <div class="flex flex-col overflow-y-auto md:flex-row">
-        <div class="h-32 md:h-auto md:w-1/2">
+        <div class="h-32 md:h-auto md:w-1/2 bg-purple-600">
             <img aria-hidden="true" class="object-cover w-full h-full"
                  src="{{ asset('images/logo-bubur-keraton.png') }}"
                  alt="Office"/>

@@ -2,7 +2,7 @@
     @if ($showButton)
         <x-slot name="buttonHeader">
             <x-button id="reductionStock" type="button" @click="openModal($event,'modalReductionStock', '#modalReductionStock')"
-                class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 text-white rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
+                class="flex items-center justify-between px-2 py-1 my-1 text-sm font-medium leading-5 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray">
                 Tambah Pengeluaran
             </x-button>
         </x-slot>
