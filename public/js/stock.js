@@ -3,7 +3,7 @@ var publicURL = $('meta[name="base-url"]').attr('content')
 function getPrevStock() {
     let url = publicURL + '/stocks/get-prev-stock'
     baseAjax(url, 'GET', { date: $('#date').val() },
-        function (data) {
+        function(data) {
             if (data.status == 200) {
                 baseSwal('success', 'Berhasil', data.message);
                 // $('#contentTableStock').empty().append(data.table_stock);
@@ -24,10 +24,10 @@ window.modalAddStock = function modalAddStock(e, modal) {
     form.attr('action', url)
 }
 
-$('#formAddStock').on('submit', function (e) {
+$('#formAddStock').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalAddStock'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
             $('#contentTableStock').empty().append(data.table_stock)
@@ -44,13 +44,13 @@ window.modalAddItem = function modalAddItem(e, modal) {
     form.attr('action', url)
 }
 
-$('#formAddItem').on('submit', function (e) {
+$('#formAddItem').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalAddItem'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             $('select.item_id').empty().append('<option value="" selected disabled>Pilih Barang</option>')
-            $.each(data.items, function (index, value) {
+            $.each(data.items, function(index, value) {
                 $('select.item_id').append('<option value="' + value.id + '">' + value.name + '</option>')
             })
             form.get(0).reset()
@@ -66,10 +66,10 @@ window.modalAddIncome = function modalAddIncome(e, modal) {
     form.attr('action', url)
 }
 
-$('#formAddIncome').on('submit', function (e) {
+$('#formAddIncome').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalAddIncome'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
             $('#contentTableIncome').empty().append(data.view)
@@ -88,10 +88,10 @@ window.modalEditIncome = function modalEditIncome(e, modal) {
     form.find('#quantity').val(btn.data('quantity') == undefined ? '' : btn.data('quantity'))
 }
 
-$('#formEditIncome').on('submit', function (e) {
+$('#formEditIncome').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalEditIncome'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
             $('#contentTableIncome').empty().append(data.view)
@@ -107,13 +107,13 @@ window.modalAddItemStock = function modalAddItemStock(e, modal) {
     form.attr('action', url)
 }
 
-$('#formAddItemStock').on('submit', function (e) {
+$('#formAddItemStock').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalAddItemStock'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             $('select.item_stock_id').empty().append('<option value="" selected disabled>Pilih Barang</option>')
-            $.each(data.item_stocks, function (index, value) {
+            $.each(data.item_stocks, function(index, value) {
                 $('select.item_stock_id').append('<option value="' + value.id + '">' + value.name + '</option>')
             })
             form.get(0).reset()
@@ -125,16 +125,28 @@ window.modalReductionStock = function modalReductionStock(e, modal) {
     let url = publicURL + '/stocks'
     let form = modal.find('form')
     form.trigger('reset')
+    console.log(form.attr('id'));
     form.attr('action', url)
 }
 
-$('#formReductionStock').on('submit', function (e) {
+$('#formReductionStock').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalReductionStock'), undefined,
-        function (data, status, jqxhr, form, modal) {
-            baseSwal('success', 'Berhasil', data.message)
+        function(data, status, jqxhr, form, modal) {
+            if (data.errors.length > 0) {
+                message = 'beberapa barang tidak dimasukkan karena :'
+                message += '<ul class="text-center">'
+                $.each(data.errors, function(index, value) {
+                    message += '<li>' + value.field + '  |  ' + value.message + '</li>'
+                })
+                message += '</ul>'
+                baseSwal('success', 'Berhasil', message, undefined);
+            } else {
+                baseSwal('success', 'Berhasil', data.message)
+            }
             form.get(0).reset()
             $('#contentTableReduction').empty().append(data.table_reduction)
+            $('#contentTableStock').empty().append(data.table_stock)
             modal.find('button.btnCloseModal').click()
         }, { tab: 'reduction-stock' })
 })
@@ -149,10 +161,10 @@ window.modalEditStock = function modalEditStock(e, modal) {
     form.find('#stock').val(btn.data('stock') == undefined ? '' : btn.data('stock'))
 }
 
-$('#formEditStock').on('submit', function (e) {
+$('#formEditStock').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalEditStock'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
             $('#contentTableStock').empty().append(data.table_stock)
@@ -171,10 +183,10 @@ window.modalEditReduction = function modalEditReduction(e, modal) {
     form.find('#description').val(btn.data('description') == undefined ? '' : btn.data('description'))
 }
 
-$('#formEditReduction').on('submit', function (e) {
+$('#formEditReduction').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalEditReduction'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
             $('#contentTableReduction').empty().append(data.table_reduction)
@@ -190,24 +202,84 @@ window.modalDelete = function modalDelete(e, modal) {
     form.attr('action', url)
 }
 
-$('#formDelete').on('submit', function (e) {
+window.downloadStockMonth = function downloadStockMonth(e, modal) {
+    let btn = $(e.currentTarget)
+    if (modal.find('input[name="type"]').val() == undefined) {
+        modal.find('form').append('<input type="hidden" name="type" value="' + btn.attr('data-type') + '"/>')
+    } else {
+        modal.find('input[name="type"]').val(btn.attr('data-type'))
+    }
+    modal.find('form').attr('method', 'GET')
+    if (btn.attr('data-type') == 'download') {
+        modal.find('button[type="submit"]').text('Download')
+    } else {
+        modal.find('button[type="submit"]').text('View')
+    }
+}
+
+$('#formDownloadStockMonth').on('submit', function(e) {
+    e.preventDefault()
+    let month = $(this).find('select[name="month"]').val(),
+        year = $(this).find('select[name="year"]').val(),
+        type = $(this).find('input[name="type"]').val()
+
+    let url = publicURL + '/report-stocks-month?month=' + month + '&year=' + year + '&type=' + type;
+    window.open(url, '_blank');
+})
+
+window.downloadSaleMonth = function downloadSaleMonth(e, modal) {
+    let btn = $(e.currentTarget)
+    if (modal.find('input[name="type"]').val() == undefined) {
+        modal.find('form').append('<input type="hidden" name="type" value="' + btn.attr('data-type') + '"/>')
+    } else {
+        modal.find('input[name="type"]').val(btn.attr('data-type'))
+    }
+    modal.find('form').attr('method', 'GET')
+    if (btn.attr('data-type') == 'download') {
+        modal.find('button[type="submit"]').text('Download')
+    } else {
+        modal.find('button[type="submit"]').text('View')
+    }
+}
+
+$('#formDownloadSaleMonth').on('submit', function(e) {
+    e.preventDefault()
+    let month = $(this).find('select[name="month"]').val(),
+        year = $(this).find('select[name="year"]').val(),
+        type = $(this).find('input[name="type"]').val()
+
+    let url = publicURL + '/report-incomes-month?month=' + month + '&year=' + year + '&type=' + type;
+    window.open(url, '_blank');
+})
+
+$('#formDelete').on('submit', function(e) {
     e.preventDefault()
     formAjax($(this), $('#modalDelete'), undefined,
-        function (data, status, jqxhr, form, modal) {
+        function(data, status, jqxhr, form, modal) {
             baseSwal('success', 'Berhasil', data.message)
             form.get(0).reset()
-            $('#' + data.contentTable).empty().append(data.view)
+            if (data.type == 'reduction') {
+                $('#contentTableReduction').empty().append(data.table_reduction)
+                $('#contentTableStock').empty().append(data.table_stock)
+            } else {
+                $('#' + data.contentTable).empty().append(data.view)
+            }
             modal.find('button.btnCloseModal').click()
         })
 })
 
-function downloadStock(e) {
-    let url = publicURL + '/report-stock/' + $('#date').val();
+function downloadStock(param) {
+    let url = publicURL + '/report-stock/' + $('#date').val() + '?type=' + param;
     window.open(url, '_blank');
 }
 
-function downloadIncome(e) {
-    let url = publicURL + '/report-incomes/' + $('#date').val();
+function downloadStockMonth(param) {
+    let url = publicURL + '/report-stocks-month/' + $('#date').val() + '?type=' + param;
+    window.open(url, '_blank');
+}
+
+function downloadIncome(param) {
+    let url = publicURL + '/report-incomes/' + $('#date').val() + '?type=' + param;
     window.open(url, '_blank');
 }
 
@@ -240,19 +312,19 @@ function btnDeleteRow(e) {
 function changeDate(e) {
     let input = $(document).find('#date')
     let site = $(document).find('#date').attr('site')
-    if(site === 'stocks'){
+    if (site === 'stocks') {
         let date = new Date(input.val());
         let now = new Date();
-        if (date.toLocaleDateString() >= now.toLocaleDateString()){
+        if (date.toLocaleDateString() >= now.toLocaleDateString()) {
             $('#getPrevStock').prop('disabled', true);
             $('#getPrevStock').addClass('hidden');
-        }else{
+        } else {
             $('#getPrevStock').removeClass('hidden');
             $('#getPrevStock').removeAttr('disabled');
         }
     }
     let url = publicURL + '/' + site + '?date=' + input.val()
-    baseAjax(url, 'GET', null, function (response) {
+    baseAjax(url, 'GET', null, function(response) {
         if (site == 'stocks') {
             $('#contentTableStock').empty().append(response.table_stock)
             $('#contentTableReduction').empty().append(response.table_reduction)
@@ -264,7 +336,7 @@ function changeDate(e) {
 
 function resetRow(modal) {
     let parent = modal.find('.modal-content')
-    parent.find('.grid').each(function (idx) {
+    parent.find('.grid').each(function(idx) {
         let len = parent.find('.grid').length
         if (len > 1) {
             parent.find('.btnDeleteRow').click()
@@ -307,7 +379,7 @@ function baseAjax(url, type, param, successCallback) {
             url: url,
             type: type,
             data: param,
-            error: function (xhr) {
+            error: function(xhr) {
                 loaderAjax(false)
                 if (intervalAjax != undefined && intervalAjax != null) {
                     clearInterval(intervalAjax)
@@ -320,7 +392,7 @@ function baseAjax(url, type, param, successCallback) {
                     let message = ''
                     if (json.errors != null) {
                         message = '<ul class="text-left">'
-                        $.each(json.errors, function (index, value) {
+                        $.each(json.errors, function(index, value) {
                             message += '<li>' + value + '</li>'
                         })
                         message += '</ul>'
@@ -336,7 +408,7 @@ function baseAjax(url, type, param, successCallback) {
                     baseSwal('error', 'Gagal', $.parseJSON(xhr.responseText).message, undefined);
                 }
             },
-            success: function (data) {
+            success: function(data) {
                 loaderAjax(false)
                 if (intervalAjax != undefined && intervalAjax != null) {
                     clearInterval(intervalAjax)
@@ -352,7 +424,7 @@ function baseAjax(url, type, param, successCallback) {
         })
     } catch (error) {
         alert('Terjadi kesalahan saat menjalankan fitur ini, mohon coba lagi')
-        // console.log(error)
+            // console.log(error)
         loaderAjax(false)
         if (intervalAjax != undefined && intervalAjax != null) {
             clearInterval(intervalAjax);
@@ -368,7 +440,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
     let xhr
     try {
         loaderAjax(true)
-        intervalFormAjax = setInterval(function () {
+        intervalFormAjax = setInterval(function() {
             xhr = requestFormAjax.data('jqxhr')
 
             if (xhr != undefined && xhr != null) {
@@ -390,7 +462,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
         }, 50 * 1000)
         requestFormAjax = form.ajaxSubmit({
             data: param,
-            beforeSerialize: function ($form, option) {
+            beforeSerialize: function($form, option) {
                 if (typeof callBackSerialize == 'function') {
                     if (!callBackSerialize($form, option)) {
                         loaderAjax(false)
@@ -399,7 +471,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
                 }
                 return true;
             },
-            error: function (xhr) {
+            error: function(xhr) {
                 loaderAjax(false)
                 if (intervalFormAjax != undefined && intervalFormAjax != null) {
                     clearInterval(intervalFormAjax)
@@ -411,7 +483,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
                     let message = ''
                     if (json.errors != null) {
                         message = '<ul class="text-left">'
-                        $.each(json.errors, function (index, value) {
+                        $.each(json.errors, function(index, value) {
                             message += '<li>' + value + '</li>'
                         })
                         message += '</ul>'
@@ -427,7 +499,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
                     baseSwal('error', 'Gagal', $.parseJSON(xhr.responseText).message, undefined);
                 }
             },
-            success: function (data, status, jqxhr) {
+            success: function(data, status, jqxhr) {
                 loaderAjax(false)
                 if (intervalFormAjax != undefined && intervalFormAjax != null) {
                     clearInterval(intervalFormAjax)
@@ -447,7 +519,7 @@ function formAjax(form, modal = undefined, callBackSerialize, callbackSuccess, p
         })
     } catch (error) {
         alert('Terjadi kesalahan saat menjalankan fitur ini, mohon coba lagi')
-        // console.log(error)
+            // console.log(error)
         loaderAjax(false)
         if (intervalFormAjax != undefined && intervalFormAjax != null) {
             clearInterval(intervalFormAjax);
@@ -470,7 +542,7 @@ function loaderAjax(status) {
 
 function fillForm(parent = undefined, index = [], container = undefined, content = undefined) {
     if (parent != undefined) {
-        $.each(index, function (index, value) {
+        $.each(index, function(index, value) {
             if (value.type == 'input') { /* [{type:'input',data:value,content:element}] */
                 parent.find(value.content).val(value.data)
             } else if (value.type == 'select' && value.timer == undefined) { /* [{type:'select',data:value,content:element}] */
@@ -508,7 +580,7 @@ function fillForm(parent = undefined, index = [], container = undefined, content
 
 function resetForm(parent, index = []) {
     if (parent != undefined) {
-        $.each(index, function (index, value) {
+        $.each(index, function(index, value) {
             if (value.type == 'select' && value.append == undefined && !value.isRemove) {
                 parent.find(value.content).prop('selectedIndex', 0).trigger('change')
             } else if (value.type == 'select' && value.append != undefined) {

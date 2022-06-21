@@ -213,7 +213,9 @@ class SaleController extends Controller
                 ->select('id', 'item_id', 'date', 'platform', DB::raw('sum(quantity) as total'))
                 ->whereDate('date', $date)
                 ->groupBy(['item_id', 'platform']);
-        }])->get();
+        }])->whereHas('incomes', function ($q) use ($date) {
+            $q->whereDate('date', $date);
+        })->get();
         foreach ($items as $key => $value) {
             if (count($value->incomes) > 0) {
                 array_map(function ($item) use($items, $key) {
@@ -229,10 +231,57 @@ class SaleController extends Controller
                 }, $value->incomes->toArray());
             }
         }
-        // return view('income.report-incomes', [
-        //     'date' => $date,
-        //     'items' => $items,
-        // ]);
-        return (new IncomeReportExcel($items, $date))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($date)) . '.xlsx');
+        if(request()->type == 'view'){
+            return view('income.report-incomes', [
+                'items' => $items,
+                'date' => $date,
+            ]);
+        }else{
+            return (new IncomeReportExcel($items, $date))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($date)) . '.xlsx');
+        }
+    }
+
+    public function printPerMonth()
+    {
+        $month = request()->month;
+        $year = request()->year;
+
+        if ($month == null || $year == null) {
+            return abort(501, 'Bulan atau Tahun tidak boleh kosong');
+        } else {
+            $startDate = Carbon::parse($year . '-' . $month . '-01', 'Asia/Jakarta')->format('Y-m-d');
+            $endDate = Carbon::parse($year . '-' . ($month + 1) . '-01', 'Asia/Jakarta')->subDays()->format('Y-m-d');
+            $items = Item::with(['incomes' => function ($q) use ($startDate, $endDate) {
+                $q->without('item')
+                    ->select('id', 'item_id', 'date', 'platform', DB::raw('sum(quantity) as total'))
+                    ->whereBetween('date', [$startDate, $endDate])
+                    ->groupBy(['item_id', 'platform']);
+            }])/* ->whereHas('incomes', function ($q) use ($startDate, $endDate) {
+                $q->whereBetween('date', [$startDate, $endDate]);
+            }) */->get();
+            foreach ($items as $key => $value) {
+                if (count($value->incomes) > 0) {
+                    array_map(function ($item) use ($items, $key) {
+                        if ($item['platform'] == 1) {
+                            $items[$key]->setAttribute('offline', $item['total']);
+                        } else if ($item['platform'] == 2) {
+                            $items[$key]->setAttribute('gojek', $item['total']);
+                        } else if ($item['platform'] == 3) {
+                            $items[$key]->setAttribute('grab', $item['total']);
+                        } else if ($item['platform'] == 4) {
+                            $items[$key]->setAttribute('shopeefood', $item['total']);
+                        }
+                    }, $value->incomes->toArray());
+                }
+            }
+            if (request()->type == 'view') {
+                return view('income.report-incomes', [
+                    'items' => $items,
+                    'date' => $startDate,
+                ]);
+            } else {
+                return (new IncomeReportExcel($items, $startDate))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($startDate)) . '.xlsx');
+            }
+        }
     }
 }

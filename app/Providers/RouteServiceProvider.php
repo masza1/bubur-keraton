@@ -40,6 +40,7 @@ class RouteServiceProvider extends ServiceProvider
         $this->routes(function () {
             Route::prefix('api')
                 ->middleware('api')
+                // ->domain('api.bubur-keraton.chappie') //laravel as subdomain
                 ->namespace($this->namespace)
                 ->group(base_path('routes/api.php'));
 

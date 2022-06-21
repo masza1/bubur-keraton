@@ -30,6 +30,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('report-stock/{date}', [StockController::class, 'reportStock']);
     Route::get('report-incomes/{date}', [SaleController::class, 'reportIncomes']);
+    Route::get('report-stocks-month', [StockController::class, 'printPerMonth']);
+    Route::get('report-incomes-month', [SaleController::class, 'printPerMonth']);
     Route::get('stocks/get-prev-stock', [StockController::class, 'getPrevStock']);
 
     Route::resource('stocks', StockController::class);

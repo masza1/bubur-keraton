@@ -19,8 +19,9 @@
     </x-slot>
 
     <x-slot name="thead">
-        <th class="px-4 py-3 w-8/12">Nama Barang</th>
-        <th class="px-4 py-3 w-3/12">Jumlah</th>
+        <th class="px-4 py-3 w-5/12">Nama Barang</th>
+        <th class="px-4 py-3 w-3/12">Stock Awal</th>
+        <th class="px-4 py-3 w-3/12">Sisa Stock</th>
         <th class="px-4 py-3 w-1/12">Actions</th>
     </x-slot>
 
@@ -28,11 +29,12 @@
         <tr class="text-gray-700 dark:text-gray-400">
             <td class="px-4 py-3">{{ $item->item_stock == null ? '-' : $item->item_stock->name }}</td>
             <td class="px-4 py-3">{{ $item->stock == null ? '-' : $item->stock }}</td>
+            <td class="px-4 py-3">{{ $item->remaining_stock == null ? '-' : $item->remaining_stock }}</td>
             <td class="px-4 py-3">
                 <div class="flex items-center space-x-4 text-sm">
                     @if ($showButton)
                         <button type="button" @click="openModal($event,'modalEditStock', '#modalEditStock')" data-id="{{ $item->id }}"
-                                data-stockid="{{ $item->item_stock_id }}" data-stock="{{ $item->stock }}"
+                            data-stockid="{{ $item->item_stock_id }}" data-stock="{{ $item->stock }}"
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-purple-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Edit">
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
@@ -41,7 +43,8 @@
                                 </path>
                             </svg>
                         </button>
-                        <button type="button" @click="openModal($event,'modalDelete', '#modalDelete')" data-id={{ $item->id }} data-site="stocks" data-tab="stock"
+                        <button type="button" @click="openModal($event,'modalDelete', '#modalDelete')" data-id={{ $item->id }} data-site="stocks"
+                            data-tab="stock"
                             class="flex items-center justify-between px-2 py-2 text-sm font-medium leading-5 text-red-600 rounded-lg dark:text-gray-400 focus:outline-none focus:shadow-outline-gray"
                             aria-label="Delete">
                             <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">

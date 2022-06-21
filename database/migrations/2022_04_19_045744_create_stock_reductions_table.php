@@ -16,6 +16,7 @@ class CreateStockReductionsTable extends Migration
         Schema::create('stock_reductions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('item_stock_id')->constrained('item_stocks')->onDelete('cascade');
+            $table->foreignId('stock_id')->constrained('stocks')->onDelete('cascade');
             $table->integer('expense')->nullable();
             $table->text('description')->nullable();
             $table->date('date')->nullable();

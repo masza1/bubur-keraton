@@ -8,10 +8,22 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <script src="{{ asset('js/app.js') }}" defer></script>
     <title>Sheet 1</title>
+    <style>
+        table.border tr,
+        table.border th,
+        table.border td{
+            border: 1px solid black; 
+            border-collapse: collapse;
+            padding: 5px;
+        }
+        td.center, th.center {
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
-    <table>
+    <table class="border">
         <thead>
             <tr>
                 <th class="text-center font-bold" colspan="7">Pemasukan</th>
@@ -43,7 +55,8 @@
                     <td>{{ $item->gojek != null ? $item->gojek : '0' }}</td>
                     <td>{{ $item->grab != null ? $item->grab : '0' }}</td>
                     <td>{{ $item->shopeefood != null ? $item->shopeefood : '0' }}</td>
-                    <td>=D{{ $index }}+E{{ $index }}+F{{ $index }}+G{{ $index }}</td>
+                    <td>{{ ($item->offline != null ? $item->offline : 0) + ($item->gojek != null ? $item->gojek : 0) + ($item->grab != null ? $item->grab : 0) + ($item->shopeefood != null ? $item->shopeefood : 0)  }}</td>
+                    {{-- <td>=D{{ $index }}+E{{ $index }}+F{{ $index }}+G{{ $index }}</td> --}}
                 </tr>
             @empty
                 <tr>
@@ -53,8 +66,19 @@
             <tr>
                 <td></td>
                 <td></td>
-                <td></td>
-                <td>{{ '#=IFERROR(SUM(INDEX(C4:C'.$index . '*D4:D' . $index . ';;));0)'}}</td>
+                <td colspan="2">
+                    @php
+                        $totals = 0;
+                    @endphp
+                    @foreach ($items as $val)
+                        @if (($offline = ($val->offline != null ? $val->offline : 0)) > 0)
+                            @php
+                                $totals = $totals + ($val->price * $offline)
+                            @endphp
+                        @endif
+                    @endforeach
+                    {{ $totals }}
+                </td>
             </tr>
             <tr>
                 <td>Keterangan :</td>
@@ -68,6 +92,7 @@
             </tr>
         </tbody>
     </table>
+    <table></table>
 </body>
 
 </html>

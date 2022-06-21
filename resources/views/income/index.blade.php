@@ -2,7 +2,14 @@
     <x-slot name="header">
         Table Pemasukan
     </x-slot>
-
+    <div class="flex-none mb-2">
+        <x-button type="button" data-type="download" @click="openModal($event,'downloadSaleMonth', '#downloadSaleMonth')">
+            Downloadn Laporan Bulanan
+        </x-button>
+        <x-button type="button" data-type="view" @click="openModal($event,'downloadSaleMonth', '#downloadSaleMonth')">
+            Lihat Laporan Bulanan
+        </x-button>
+    </div>
     <div class="px-4 py-3 mb-8 bg-white rounded-lg shadow-md dark:bg-gray-800">
         <div class="flex">
             <div class="flex-auto">
@@ -10,15 +17,18 @@
                     value="{{ $date ?? date('Y-m-d') }}" />
             </div>
             <div class="flex-none ml-2 mt-1">
-                <x-button type="button" id="downloadIncome" @click="downloadIncome">
-                    Download
+                <x-button type="button" id="downloadIncome" @click="downloadIncome('download')">
+                    <i class="fa fa-download"></i>
+                </x-button>
+                <x-button type="button" id="downloadIncome" @click="downloadIncome('view')">
+                    <i class="fa fa-eye"></i>
                 </x-button>
             </div>
         </div>
     </div>
 
     <div id="contentTableIncome">
-        <x-incomes.table-incomes :incomes="$incomes" :showButton="$showButton"/>
+        <x-incomes.table-incomes :incomes="$incomes" :showButton="$showButton" />
     </div>
 
     <x-slot name="modals">
@@ -124,6 +134,23 @@
                     <x-input type="number" id="quantity" min="1" name="quantity" class="block w-full" autofocus />
                 </div>
             </div>
+        </x-base-modal>
+        <x-base-modal id="downloadSaleMonth" :modalWidth="__('w-3/12')" :withForm="true" :formId="__('formDownloadSaleMonth')">
+            <x-slot name="modalTitle">Pilih Bulan dan Tahun</x-slot>
+            <x-label>Bulan</x-label>
+            <x-input :inputType="__('select')" name="month" class="block w-full" autofocus>
+                <option value="" selected disabled>Pilih Bulan</option>
+                @for ($i = 1; $i < 13; $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </x-input>
+            <x-label>Tahun</x-label>
+            <x-input :inputType="__('select')" name="year" class="block w-full" autofocus>
+                <option value="" selected disabled>Pilih Tahun</option>
+                @for ($i = 2019; $i <= date('Y'); $i++)
+                    <option value="{{ $i }}">{{ $i }}</option>
+                @endfor
+            </x-input>
         </x-base-modal>
     </x-slot>
 

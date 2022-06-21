@@ -13,4 +13,8 @@ class StockReduction extends Model
     {
         return $this->belongsTo(ItemStock::class);
     }
+
+    public function stock(){
+        return $this->belongsTo(Stock::class);
+    }
 }
