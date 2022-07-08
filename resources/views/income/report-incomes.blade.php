@@ -11,12 +11,14 @@
     <style>
         table.border tr,
         table.border th,
-        table.border td{
-            border: 1px solid black; 
+        table.border td {
+            border: 1px solid black;
             border-collapse: collapse;
             padding: 5px;
         }
-        td.center, th.center {
+
+        td.center,
+        th.center {
             text-align: center;
         }
     </style>
@@ -44,9 +46,9 @@
         </thead>
         <tbody>
             @forelse ($items as $key => $item)
-            @php
-                $index = $key + 4
-            @endphp
+                @php
+                    $index = $key + 4;
+                @endphp
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $item->name != null ? $item->name : '-' }}</td>
@@ -55,7 +57,7 @@
                     <td>{{ $item->gojek != null ? $item->gojek : '0' }}</td>
                     <td>{{ $item->grab != null ? $item->grab : '0' }}</td>
                     <td>{{ $item->shopeefood != null ? $item->shopeefood : '0' }}</td>
-                    <td>{{ ($item->offline != null ? $item->offline : 0) + ($item->gojek != null ? $item->gojek : 0) + ($item->grab != null ? $item->grab : 0) + ($item->shopeefood != null ? $item->shopeefood : 0)  }}</td>
+                    <td>{{ ($item->offline != null ? $item->offline : 0) + ($item->gojek != null ? $item->gojek : 0) + ($item->grab != null ? $item->grab : 0) + ($item->shopeefood != null ? $item->shopeefood : 0) }}</td>
                     {{-- <td>=D{{ $index }}+E{{ $index }}+F{{ $index }}+G{{ $index }}</td> --}}
                 </tr>
             @empty
@@ -71,24 +73,33 @@
                         $totals = 0;
                     @endphp
                     @foreach ($items as $val)
-                        @if (($offline = ($val->offline != null ? $val->offline : 0)) > 0)
+                        @if (($offline = $val->offline != null ? $val->offline : 0) > 0)
                             @php
-                                $totals = $totals + ($val->price * $offline)
+                                $totals = $totals + $val->price * $offline;
                             @endphp
                         @endif
                     @endforeach
                     {{ $totals }}
                 </td>
             </tr>
+            @php
+                $grand_total = 0;
+            @endphp
+            @foreach ($buy_items as $key => $item)
+                @php
+                    $grand_total += $item->price;
+                @endphp
+            @endforeach
             <tr>
-                <td>Keterangan :</td>
+                <td colspan="2">Total Belanja : </td>
+                <td class="text-left">{{ $grand_total }}</td>
+                
             </tr>
             <tr></tr>
             <tr>
-                <td>Jumlah Porsi :</td>
-            </tr>
-            <tr>
-                <td>Tagihan :</td>
+                <td colspan="2">Pemasukan Bersih :</td>
+                <td class="text-left">{{ $totals - $grand_total }}</td>
+                
             </tr>
         </tbody>
     </table>

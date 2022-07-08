@@ -105,6 +105,14 @@
                     Pemasukan
                 </x-nav-link>
             </li>
+            <li class="relative px-6 py-3">
+                <x-nav-link href="{{ route('buy_items.index') }}" :active="request()->routeIs('buy_items.index')">
+                    <x-slot name="icon">
+                        <i class="fa fa-shopping-cart"></i>
+                    </x-slot>
+                    Daftar Belanja
+                </x-nav-link>
+            </li>
         </ul>
     </div>
 </aside>

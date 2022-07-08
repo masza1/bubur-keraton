@@ -17,12 +17,14 @@ class IncomeReportExcel implements WithColumnWidths, FromView, WithStyles, WithE
 
     protected $items;
     protected $date;
+    protected $buy_items;
     protected $index;
 
-    public function __construct($items, $date)
+    public function __construct($items, $date, $buy_items)
     {
         $this->items = $items;
         $this->date = $date;
+        $this->buy_items = $buy_items;
     }
 
     public function view(): View
@@ -30,6 +32,7 @@ class IncomeReportExcel implements WithColumnWidths, FromView, WithStyles, WithE
         return view('income.report-incomes', [
             'date' => $this->date,
             'items' => $this->items,
+            'buy_items' => $this->buy_items,
         ]);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\BuyItemController;
 use App\Http\Controllers\SaleController;
 use App\Http\Controllers\StockController;
 use Illuminate\Support\Facades\Route;
@@ -30,12 +31,15 @@ Route::middleware('auth')->group(function () {
 
     Route::get('report-stock/{date}', [StockController::class, 'reportStock']);
     Route::get('report-incomes/{date}', [SaleController::class, 'reportIncomes']);
+    Route::get('report-buy-item/{date}', [BuyItemController::class, 'reportItems']);
     Route::get('report-stocks-month', [StockController::class, 'printPerMonth']);
     Route::get('report-incomes-month', [SaleController::class, 'printPerMonth']);
+    Route::get('report-buy-item-month', [BuyItemController::class, 'printPerMonth']);
     Route::get('stocks/get-prev-stock', [StockController::class, 'getPrevStock']);
 
     Route::resource('stocks', StockController::class);
     Route::resource('incomes', SaleController::class);
+    Route::resource('buy_items', BuyItemController::class);
 
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 

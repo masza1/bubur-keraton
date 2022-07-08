@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\IncomeReportExcel;
+use App\Models\BuyItem;
 use App\Models\Income;
 use App\Models\Item;
 use Carbon\Carbon;
@@ -231,13 +232,16 @@ class SaleController extends Controller
                 }, $value->incomes->toArray());
             }
         }
+        $buy_items = BuyItem::whereDate('date', date('Y-m-d', strtotime($date)))
+            ->get();
         if(request()->type == 'view'){
             return view('income.report-incomes', [
                 'items' => $items,
                 'date' => $date,
+                'buy_items' => $buy_items,
             ]);
         }else{
-            return (new IncomeReportExcel($items, $date))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($date)) . '.xlsx');
+            return (new IncomeReportExcel($items, $date, $buy_items))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($date)) . '.xlsx');
         }
     }
 
@@ -274,13 +278,15 @@ class SaleController extends Controller
                     }, $value->incomes->toArray());
                 }
             }
+            $buy_items = BuyItem::whereBetween('date', [$startDate, $endDate])->get();
             if (request()->type == 'view') {
                 return view('income.report-incomes', [
                     'items' => $items,
                     'date' => $startDate,
+                    'buy_items' => $buy_items,
                 ]);
             } else {
-                return (new IncomeReportExcel($items, $startDate))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($startDate)) . '.xlsx');
+                return (new IncomeReportExcel($items, $startDate, $buy_items))->download('laporan_pemasukan_' . date('d_M_Y', strtotime($startDate)) . '.xlsx');
             }
         }
     }
